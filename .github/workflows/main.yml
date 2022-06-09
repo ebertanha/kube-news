@@ -22,13 +22,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Docker Login
+      - name: Autenticando usuário no Docker Hub
         uses: docker/login-action@v2.0.0
         with:
           username: ${{secrets.DOCKERHUB_USER}}
           password: ${{secrets.DOCKERHUB_PWD}}
           
-      - name: Build and push Docker images
+      - name: Build da imagem e push no Docker Hub
         uses: docker/build-push-action@v3.0.0
         with:
           file: ./src/Dockerfile
@@ -46,13 +46,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
-      - name: Kubernetes Set Context
+      - name: Definindo o kubeconfig
         uses: Azure/k8s-set-context@v2
         with:
           method: kubeconfig
           kubeconfig: ${{secrets.K8S_CONFIG}}
 
-      - name: Deploy to Kubernetes cluster
+      - name: Deploy no Kubernetes cluster
         uses: Azure/k8s-deploy@v3.1
         with:          
           images: ebertanha/kube-news:${{github.run_number}}
